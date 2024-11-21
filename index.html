@@ -28,6 +28,14 @@
     #enter-btn:hover {
       background-color: #555;
     }
+    #video-container {
+      display: none; /* Hide video initially */
+    }
+    video {
+      width: 80%;
+      max-width: 1200px;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -35,14 +43,24 @@
   <!-- "Click to Enter" Button -->
   <button id="enter-btn">Click to Enter</button>
 
+  <!-- Video Player (Hidden initially) -->
+  <div id="video-container">
+    <video id="video-player" controls autoplay>
+      <source src="https://drive.google.com/uc?export=download&id=16MmurRx2QX0dTwjj3IqyGUub2zv-naTA" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
   <script>
-    // Get the button element
+    // Get the button and video container
     const enterBtn = document.getElementById('enter-btn');
+    const videoContainer = document.getElementById('video-container');
 
     // Add event listener for button click
     enterBtn.addEventListener('click', function() {
-      // Redirect to the YouTube video page
-      window.location.href = "https://www.youtube.com/watch?v=SIaFtAKnqBU&si=vzPkL32M6Hb2Mmk6";
+      // Hide the button and show the video container
+      document.getElementById('enter-btn').style.display = 'none';
+      videoContainer.style.display = 'block';
     });
   </script>
 
