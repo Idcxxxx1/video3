@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click to Enter</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #video-container {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: black;
+      justify-content: center;
+      align-items: center;
+    }
+    #enter-btn {
+      padding: 20px 40px;
+      font-size: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    #enter-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- The "Click to Enter" Button -->
+  <button id="enter-btn">Click to Enter</button>
+
+  <!-- Video Container -->
+  <div id="video-container">
+    <iframe id="video" width="100%" height="100%" src="https://www.youtube.com/embed/SIaFtAKnqBU?autoplay=1&si=vzPkL32M6Hb2Mmk6" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+  </div>
+
+  <script>
+    // Wait for the page to load
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get elements
+      const enterBtn = document.getElementById('enter-btn');
+      const videoContainer = document.getElementById('video-container');
+      
+      // Handle button click
+      enterBtn.addEventListener('click', function() {
+        // Hide the button
+        enterBtn.style.display = 'none';
+        
+        // Show the video container
+        videoContainer.style.display = 'flex';
+      });
+    });
+  </script>
+
+</body>
+</html>
