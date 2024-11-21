@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click to Watch Video</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #000;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #enter-btn {
+      padding: 20px 40px;
+      font-size: 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    #enter-btn:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- "Click to Enter" Button -->
+  <button id="enter-btn">Click to Enter</button>
+
+  <script>
+    // Get the button element
+    const enterBtn = document.getElementById('enter-btn');
+
+    // Add event listener for button click
+    enterBtn.addEventListener('click', function() {
+      // Redirect to the YouTube video page
+      window.location.href = "https://www.youtube.com/watch?v=SIaFtAKnqBU&si=vzPkL32M6Hb2Mmk6";
+    });
+  </script>
+
+</body>
+</html>
