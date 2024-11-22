@@ -37,22 +37,104 @@
         opacity: 0.5;
       }
     }
+
+    #message {
+      display: none;
+      color: lime;
+      font-size: 4rem;
+      text-align: center;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
   <button id="enter-btn">Click to Enter</button>
+  <div id="message">🎉 At Least You Tried 🎉</div>
+  <canvas id="confetti-canvas"></canvas>
 
   <script>
+    let clickCount = 0;
     const enterBtn = document.getElementById("enter-btn");
+    const message = document.getElementById("message");
+    const confettiCanvas = document.getElementById("confetti-canvas");
 
-    enterBtn.addEventListener("click", () => {
-      // Attempt to launch fullscreen
-      document.documentElement.requestFullscreen().catch(err => {
-        console.warn("Fullscreen not supported or denied:", err);
+    // Confetti effect
+    const confetti = confettiCanvas.getContext("2d");
+    const particles = [];
+    const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"];
+
+    function createParticle(x, y) {
+      const size = Math.random() * 5 + 5;
+      return {
+        x: x,
+        y: y,
+        size: size,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        velocityX: Math.random() * 6 - 3,
+        velocityY: Math.random() * -6 - 3,
+        life: Math.random() * 30 + 50
+      };
+    }
+
+    function updateParticles() {
+      confetti.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      particles.forEach((p, index) => {
+        confetti.fillStyle = p.color;
+        confetti.beginPath();
+        confetti.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+        confetti.fill();
+        p.x += p.velocityX;
+        p.y += p.velocityY;
+        p.life--;
+        if (p.life <= 0) {
+          particles.splice(index, 1);
+        }
       });
+    }
 
-      // Redirect to YouTube video
-      window.location.href = "https://www.youtube.com/embed/SIaFtAKnqBU?autoplay=1&mute=0&si=vzPkL32M6Hb2Mmk6";
+    function spawnConfetti() {
+      for (let i = 0; i < 100; i++) {
+        particles.push(createParticle(confettiCanvas.width / 2, confettiCanvas.height / 2));
+      }
+    }
+
+    function startConfetti() {
+      spawnConfetti();
+      const interval = setInterval(() => {
+        updateParticles();
+        if (particles.length === 0) {
+          clearInterval(interval);
+        }
+      }, 30);
+    }
+
+    // Adjust canvas to screen size
+    function resizeCanvas() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Button click logic
+    enterBtn.addEventListener("click", () => {
+      clickCount++;
+
+      if (clickCount === 2) {
+        enterBtn.style.display = "none"; // Hide button
+        setTimeout(() => {
+          message.style.display = "block"; // Show message
+          startConfetti(); // Start confetti effect
+        }, 5000); // Wait 5 seconds
+      }
     });
   </script>
 </body>
