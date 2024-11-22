@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Click to Enter</title>
+  <title>Hacked Simulation</title>
   <style>
     body {
       margin: 0;
@@ -15,7 +15,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
+      overflow: hidden; /* Prevent scrolling */
     }
 
     #enter-btn {
@@ -108,10 +108,10 @@
       <br>Accessing User Data...
       <br>Compromising Security Protocols...
       <br>Retrieving Files...
-      <br><br>USER LOCATION: Belgium
+      <br><br>USER LOCATION: Unknown
       <br>IP ADDRESS: 192.168.1.1
       <br><br>[FILES DECRYPTED]
-      <br>Username: JohnDoe
+      <br>Username: **********
       <br>Password: **********
       <br><br>[Injecting Malware] ████████████████ 100%
       <br><br>**ERROR** SYSTEM CRITICAL FAILURE DETECTED
@@ -123,13 +123,18 @@
     const enterBtn = document.getElementById("enter-btn");
     const hackedContainer = document.getElementById("hacked-container");
 
+    // Trigger fullscreen and display the hacked screen
     enterBtn.addEventListener("click", () => {
+      // Request Fullscreen
+      document.documentElement.requestFullscreen().catch(err => {
+        console.error("Fullscreen request failed:", err);
+      });
+
+      // Hide the button and show the hacked screen
       enterBtn.style.display = "none";
       hackedContainer.style.display = "block";
-
-      // Fake full-screen effect
-      document.documentElement.requestFullscreen().catch(() => {});
     });
   </script>
 </body>
 </html>
+
