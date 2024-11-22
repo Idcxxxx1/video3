@@ -67,7 +67,8 @@
     const ctx = particleCanvas.getContext("2d");
 
     let clickCount = 0;
-    let timerStarted = false;
+    let loopCount = 0;
+    const maxLoops = 2; // Number of times to repeat the click-to-enter cycle
     const particles = [];
     const colors = ["#ff0000", "#ffae00", "#ffdd00", "#00ff00", "#00aaff", "#aa00ff"];
 
@@ -130,17 +131,37 @@
       }, 30);
     }
 
+    // Reset the entire process
+    function resetProcess() {
+      message.style.display = "none"; // Hide the message
+      clickCount = 0; // Reset click count
+      loopCount = 0; // Reset loop count
+      enterBtn.style.display = "block"; // Show the button
+    }
+
     // Button click logic
     enterBtn.addEventListener("click", () => {
       clickCount++;
 
-      if (clickCount === 2 && !timerStarted) {
-        timerStarted = true; // Ensure timer only starts once
-        setTimeout(() => {
-          message.style.display = "block"; // Show the message
-          spawnFireworks(window.innerWidth / 2, window.innerHeight / 2); // Firework particles
-          startFireworks();
-        }, 5000); // Wait 5 seconds
+      if (clickCount === 2) {
+        // If clicked twice, check if the loop is complete
+        if (loopCount < maxLoops) {
+          loopCount++;
+          clickCount = 0; // Reset clicks for the next loop
+        } else {
+          // Final message and fireworks
+          enterBtn.style.display = "none"; // Hide the button
+          setTimeout(() => {
+            message.style.display = "block"; // Show the message
+            spawnFireworks(window.innerWidth / 2, window.innerHeight / 2); // Fireworks
+            startFireworks();
+
+            // Reset everything after 5 seconds
+            setTimeout(() => {
+              resetProcess();
+            }, 5000);
+          }, 5000); // Wait 5 seconds before showing the message
+        }
       }
     });
   </script>
