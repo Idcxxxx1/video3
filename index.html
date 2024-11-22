@@ -57,57 +57,72 @@
 </head>
 <body>
   <button id="enter-btn">Click to Enter</button>
-  <div id="message">🎉 At Least You Tried 🎉</div>
-  <canvas id="confetti-canvas"></canvas>
+  <div id="message">At Least You Tried</div>
+  <canvas id="particle-canvas"></canvas>
 
   <script>
-    let clickCount = 0;
     const enterBtn = document.getElementById("enter-btn");
     const message = document.getElementById("message");
-    const confettiCanvas = document.getElementById("confetti-canvas");
+    const particleCanvas = document.getElementById("particle-canvas");
+    const ctx = particleCanvas.getContext("2d");
 
-    // Confetti effect
-    const confetti = confettiCanvas.getContext("2d");
+    let clickCount = 0;
+    let hasTimerStarted = false;
     const particles = [];
-    const colors = ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff"];
+    const colors = ["#ff0000", "#ffae00", "#ffdd00", "#00ff00", "#00aaff", "#aa00ff"];
 
-    function createParticle(x, y) {
-      const size = Math.random() * 5 + 5;
+    // Resize canvas to match screen size
+    function resizeCanvas() {
+      particleCanvas.width = window.innerWidth;
+      particleCanvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Create a particle object
+    function createParticle(x, y, explosion = false) {
+      const size = Math.random() * (explosion ? 10 : 5) + 3;
       return {
         x: x,
         y: y,
         size: size,
         color: colors[Math.floor(Math.random() * colors.length)],
-        velocityX: Math.random() * 6 - 3,
-        velocityY: Math.random() * -6 - 3,
+        velocityX: Math.random() * (explosion ? 10 : 4) - (explosion ? 5 : 2),
+        velocityY: Math.random() * (explosion ? 10 : -4) - (explosion ? 5 : 1),
+        gravity: explosion ? 0.05 : 0.2,
         life: Math.random() * 30 + 50
       };
     }
 
+    // Generate particles
+    function spawnParticles(x, y, explosion = false) {
+      const count = explosion ? 50 : 20;
+      for (let i = 0; i < count; i++) {
+        particles.push(createParticle(x, y, explosion));
+      }
+    }
+
+    // Update particles
     function updateParticles() {
-      confetti.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
       particles.forEach((p, index) => {
-        confetti.fillStyle = p.color;
-        confetti.beginPath();
-        confetti.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
-        confetti.fill();
         p.x += p.velocityX;
         p.y += p.velocityY;
+        p.velocityY += p.gravity; // Add gravity for a more realistic effect
         p.life--;
         if (p.life <= 0) {
           particles.splice(index, 1);
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
+          ctx.fill();
         }
       });
     }
 
-    function spawnConfetti() {
-      for (let i = 0; i < 100; i++) {
-        particles.push(createParticle(confettiCanvas.width / 2, confettiCanvas.height / 2));
-      }
-    }
-
-    function startConfetti() {
-      spawnConfetti();
+    // Start particle animation
+    function startParticles() {
       const interval = setInterval(() => {
         updateParticles();
         if (particles.length === 0) {
@@ -116,24 +131,22 @@
       }, 30);
     }
 
-    // Adjust canvas to screen size
-    function resizeCanvas() {
-      confettiCanvas.width = window.innerWidth;
-      confettiCanvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
     // Button click logic
-    enterBtn.addEventListener("click", () => {
+    enterBtn.addEventListener("click", (e) => {
       clickCount++;
 
-      if (clickCount === 2) {
-        enterBtn.style.display = "none"; // Hide button
+      if (clickCount === 2 && !hasTimerStarted) {
+        hasTimerStarted = true; // Ensure the timer doesn't restart
         setTimeout(() => {
-          message.style.display = "block"; // Show message
-          startConfetti(); // Start confetti effect
+          message.style.display = "block"; // Show the message
+          spawnParticles(window.innerWidth / 2, window.innerHeight / 2, true); // Firework particles
+          startParticles();
         }, 5000); // Wait 5 seconds
+      } else {
+        // Create confetti particles around the click point
+        const rect = particleCanvas.getBoundingClientRect();
+        spawnParticles(e.clientX - rect.left, e.clientY - rect.top);
+        startParticles();
       }
     });
   </script>
