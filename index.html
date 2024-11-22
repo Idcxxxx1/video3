@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hacked Simulation</title>
+  <title>Click to Enter</title>
   <style>
     body {
       margin: 0;
@@ -15,7 +15,7 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden; /* Prevent scrolling */
+      overflow: hidden;
     }
 
     #enter-btn {
@@ -37,104 +37,23 @@
         opacity: 0.5;
       }
     }
-
-    #hacked-container {
-      display: none;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      overflow: hidden;
-      position: relative;
-    }
-
-    #hacked-text {
-      position: absolute;
-      white-space: pre-wrap;
-      font-size: 14px;
-      line-height: 1.5;
-      padding: 10px;
-      animation: scroll 15s linear infinite;
-    }
-
-    @keyframes scroll {
-      0% {
-        transform: translateY(100%);
-      }
-      100% {
-        transform: translateY(-100%);
-      }
-    }
-
-    #flashing {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 0, 0, 0.1);
-      animation: flash 0.1s infinite;
-      z-index: 10;
-    }
-
-    @keyframes flash {
-      0%, 100% {
-        background: rgba(255, 0, 0, 0.1);
-      }
-      50% {
-        background: rgba(255, 0, 0, 0.4);
-      }
-    }
-
-    #error-message {
-      position: absolute;
-      bottom: 10%;
-      width: 100%;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      z-index: 20;
-    }
   </style>
 </head>
 <body>
   <button id="enter-btn">Click to Enter</button>
 
-  <div id="hacked-container">
-    <div id="flashing"></div>
-    <div id="error-message">SYSTEM ERROR DETECTED...</div>
-    <div id="hacked-text">
-      <span>[SYSTEM BOOT]</span>
-      <br>Initializing Hack...
-      <br>Accessing User Data...
-      <br>Compromising Security Protocols...
-      <br>Retrieving Files...
-      <br><br>USER LOCATION: Unknown
-      <br>IP ADDRESS: 192.168.1.1
-      <br><br>[FILES DECRYPTED]
-      <br>Username: **********
-      <br>Password: **********
-      <br><br>[Injecting Malware] ████████████████ 100%
-      <br><br>**ERROR** SYSTEM CRITICAL FAILURE DETECTED
-      <br>Shutting Down...
-    </div>
-  </div>
-
   <script>
     const enterBtn = document.getElementById("enter-btn");
-    const hackedContainer = document.getElementById("hacked-container");
 
-    // Trigger fullscreen and display the hacked screen
     enterBtn.addEventListener("click", () => {
-      // Request Fullscreen
+      // Attempt to launch fullscreen
       document.documentElement.requestFullscreen().catch(err => {
-        console.error("Fullscreen request failed:", err);
+        console.warn("Fullscreen not supported or denied:", err);
       });
 
-      // Hide the button and show the hacked screen
-      enterBtn.style.display = "none";
-      hackedContainer.style.display = "block";
+      // Redirect to YouTube video
+      window.location.href = "https://www.youtube.com/embed/SIaFtAKnqBU?autoplay=1&mute=0&si=vzPkL32M6Hb2Mmk6";
     });
   </script>
 </body>
 </html>
-
