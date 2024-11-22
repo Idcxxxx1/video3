@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click to Enter</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: lime;
+      font-family: "Courier New", Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #enter-btn {
+      padding: 20px 40px;
+      font-size: 20px;
+      background-color: black;
+      color: lime;
+      border: 2px solid lime;
+      cursor: pointer;
+      text-transform: uppercase;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button id="enter-btn">Click to Enter</button>
+
+  <script>
+    const enterBtn = document.getElementById("enter-btn");
+
+    enterBtn.addEventListener("click", () => {
+      // Attempt to launch fullscreen
+      document.documentElement.requestFullscreen().catch(err => {
+        console.warn("Fullscreen not supported or denied:", err);
+      });
+
+      // Redirect to YouTube video
+      window.location.href = "https://www.youtube.com/embed/SIaFtAKnqBU?autoplay=1&mute=0&si=vzPkL32M6Hb2Mmk6";
+    });
+  </script>
+</body>
+</html>
