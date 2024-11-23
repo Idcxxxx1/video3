@@ -3,167 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Click to Enter</title>
+  <title>Click Challenge</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       background-color: black;
-      color: lime;
-      font-family: "Courier New", Courier, monospace;
+      color: white;
+      font-family: Arial, sans-serif;
+      text-align: center;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      overflow: hidden;
+      margin: 0;
     }
-
-    #enter-btn {
-      padding: 20px 40px;
-      font-size: 20px;
-      background-color: black;
-      color: lime;
-      border: 2px solid lime;
+    #button {
+      background-color: white;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
       cursor: pointer;
-      text-transform: uppercase;
-      animation: pulse 1s infinite;
+      margin-top: 20px;
     }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
-
-    #message {
-      display: none;
-      color: lime;
-      font-size: 4rem;
-      text-align: center;
-    }
-
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
+    #button:active {
+      transform: scale(0.95);
     }
   </style>
 </head>
 <body>
-  <button id="enter-btn">Click to Enter</button>
-  <div id="message">At Least You Tried</div>
-  <canvas id="particle-canvas"></canvas>
+  <div id="message">Click to enter</div>
+  <button id="button" onclick="handleClick()">Click me</button>
 
   <script>
-    const enterBtn = document.getElementById("enter-btn");
-    const message = document.getElementById("message");
-    const particleCanvas = document.getElementById("particle-canvas");
-    const ctx = particleCanvas.getContext("2d");
-
+    let step = 1;
     let clickCount = 0;
-    let loopCount = 0;
-    const maxLoops = 2; // Number of times to repeat the click-to-enter cycle
-    const particles = [];
-    const colors = ["#ff0000", "#ffae00", "#ffdd00", "#00ff00", "#00aaff", "#aa00ff"];
 
-    // Resize canvas to match screen size
-    function resizeCanvas() {
-      particleCanvas.width = window.innerWidth;
-      particleCanvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-
-    // Create a particle object
-    function createParticle(x, y) {
-      const size = Math.random() * 5 + 5;
-      return {
-        x: x,
-        y: y,
-        size: size,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        velocityX: Math.random() * 10 - 5,
-        velocityY: Math.random() * 10 - 5,
-        gravity: 0.05,
-        life: Math.random() * 30 + 50
-      };
-    }
-
-    // Generate particles
-    function spawnFireworks(x, y) {
-      for (let i = 0; i < 50; i++) {
-        particles.push(createParticle(x, y));
+    function handleClick() {
+      const message = document.getElementById('message');
+      const button = document.getElementById('button');
+      
+      if (step === 1) {
+        clickCount++;
+        if (clickCount === 2) {
+          startTimer(5, () => {
+            message.textContent = "Nog niet";
+            clickCount = 0;
+            step = 2;
+            button.textContent = "Click me (3x)";
+          });
+        }
+      } else if (step === 2) {
+        clickCount++;
+        if (clickCount === 3) {
+          startTimer(5, () => {
+            message.textContent = "Nog niet";
+            clickCount = 0;
+            step = 3;
+            button.textContent = "Click me (1x)";
+          });
+        }
+      } else if (step === 3) {
+        clickCount++;
+        if (clickCount === 1) {
+          startTimer(5, () => {
+            message.textContent = "Hier is niks";
+            button.style.display = "none";
+            setTimeout(resetGame, 5000);
+          });
+        }
       }
     }
 
-    // Update particles
-    function updateParticles() {
-      ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
-      particles.forEach((p, index) => {
-        p.x += p.velocityX;
-        p.y += p.velocityY;
-        p.velocityY += p.gravity; // Add gravity for a more realistic effect
-        p.life--;
-        if (p.life <= 0) {
-          particles.splice(index, 1);
-        } else {
-          ctx.fillStyle = p.color;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-      });
-    }
-
-    // Start particle animation
-    function startFireworks() {
+    function startTimer(seconds, callback) {
+      const button = document.getElementById('button');
+      button.disabled = true;
+      let remaining = seconds;
       const interval = setInterval(() => {
-        updateParticles();
-        if (particles.length === 0) {
+        button.textContent = `Wait ${remaining}s`;
+        remaining--;
+        if (remaining < 0) {
           clearInterval(interval);
+          button.disabled = false;
+          callback();
         }
-      }, 30);
+      }, 1000);
     }
 
-    // Reset the entire process
-    function resetProcess() {
-      message.style.display = "none"; // Hide the message
-      clickCount = 0; // Reset click count
-      loopCount = 0; // Reset loop count
-      enterBtn.style.display = "block"; // Show the button
+    function resetGame() {
+      const message = document.getElementById('message');
+      const button = document.getElementById('button');
+      
+      message.textContent = "Click to enter";
+      button.textContent = "Click me";
+      button.style.display = "inline-block";
+      step = 1;
+      clickCount = 0;
     }
-
-    // Button click logic
-    enterBtn.addEventListener("click", () => {
-      clickCount++;
-
-      if (clickCount === 2) {
-        // If clicked twice, check if the loop is complete
-        if (loopCount < maxLoops) {
-          loopCount++;
-          clickCount = 0; // Reset clicks for the next loop
-        } else {
-          // Final message and fireworks
-          enterBtn.style.display = "none"; // Hide the button
-          setTimeout(() => {
-            message.style.display = "block"; // Show the message
-            spawnFireworks(window.innerWidth / 2, window.innerHeight / 2); // Fireworks
-            startFireworks();
-
-            // Reset everything after 5 seconds
-            setTimeout(() => {
-              resetProcess();
-            }, 5000);
-          }, 5000); // Wait 5 seconds before showing the message
-        }
-      }
-    });
   </script>
 </body>
 </html>
